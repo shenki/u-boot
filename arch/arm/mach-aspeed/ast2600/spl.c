@@ -34,6 +34,7 @@ void board_init_f(ulong dummy)
 
 u32 spl_boot_device(void)
 {
+#if IS_ENABLED(CONFIG_ASPEED_SECURE_BOOT)
 	switch (aspeed_bootmode()) {
 	case AST_BOOTMODE_EMMC:
 		return (IS_ENABLED(CONFIG_ASPEED_SECURE_BOOT))?
@@ -46,6 +47,15 @@ u32 spl_boot_device(void)
 			ASPEED_SECBOOT_DEVICE_UART : ASPEED_BOOT_DEVICE_UART;
 	default:
 		break;
+	}
+#endif
+	switch (aspeed_bootmode()) {
+	case AST_BOOTMODE_EMMC:
+		return BOOT_DEVICE_MMC1;
+	case AST_BOOTMODE_SPI:
+		return BOOT_DEVICE_SPI;
+	case AST_BOOTMODE_UART:
+		return BOOT_DEVICE_UART;
 	}
 
 	return BOOT_DEVICE_NONE;
