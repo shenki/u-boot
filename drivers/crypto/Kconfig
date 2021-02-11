@@ -2,4 +2,16 @@ menu "Hardware crypto devices"
 
 source drivers/crypto/fsl/Kconfig
 
+config ASPEED_HACE
+	bool "ASPEED Hash and Crypto Engine"
+	select SHA_HW_ACCEL
+	select SHA_PROG_HW_ACCEL
+	help
+	 Select this option to enable a driver for using the SHA engine in
+	 the ASPEED BMC SoCs.
+
+	 Enabling this allows the use of SHA operations in hardware without requiring the
+	 SHA software implementations, saving code size.
+
+
 endmenu
