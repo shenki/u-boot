@@ -1135,9 +1135,22 @@ int fit_set_timestamp(void *fit, int noffset, time_t timestamp)
  *     0, on success
  *    -1, when algo is unsupported
  */
-int calculate_hash(const void *data, int data_len, const char *algo,
+int calculate_hash(const void *data, int data_len, const char *algo_name,
 			uint8_t *value, int *value_len)
 {
+	struct hash_algo *algo;
+
+	if (hash_lookup_algo(algo_name, &algo)) {
+		debug("Unsupported hash alogrithm\n");
+		return -1;
+	}
+
+	algo->hash_func_ws(data, data_len, value, algo->chunk_size);
+	*value_len = algo->digest_size;
+
+	return 0;
+
+#if 0
 	if (IMAGE_ENABLE_CRC32 && strcmp(algo, "crc32") == 0) {
 		*((uint32_t *)value) = crc32_wd(0, data, data_len,
 							CHUNKSZ_CRC32);
@@ -1167,6 +1180,7 @@ int calculate_hash(const void *data, int data_len, const char *algo,
 		return -1;
 	}
 	return 0;
+#endif
 }
 
 static int fit_image_check_hash(const void *fit, int noffset, const void *data,
