@@ -64,6 +64,12 @@ u32 spl_boot_device(void)
 	return BOOT_DEVICE_NONE;
 }
 
+void board_boot_order(u32 *spl_boot_list)
+{
+	spl_boot_list[0] = spl_boot_device();
+	spl_boot_list[1] = ASPEED_BOOT_DEVICE_UART;
+}
+
 #ifdef CONFIG_SPL_OS_BOOT
 int spl_start_uboot(void)
 {
