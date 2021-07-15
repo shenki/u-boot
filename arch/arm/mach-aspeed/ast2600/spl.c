@@ -39,7 +39,7 @@ void spl_board_init(void)
 {
 	struct udevice *dev;
 
-	if (IS_ENABLED(CONFIG_ASPEED_HACE) &&
+	if ((IS_ENABLED(CONFIG_ASPEED_HACE_V1) || IS_ENABLED(CONFIG_ASPEED_HACE)) &&
 	    uclass_get_device_by_driver(UCLASS_MISC,
 					DM_GET_DRIVER(aspeed_hace),
 					&dev)) {
