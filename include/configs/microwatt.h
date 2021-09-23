@@ -12,4 +12,10 @@
 #define CONFIG_SYS_GBL_DATA_OFFSET	0x01000000
 #define CONFIG_SYS_MALLOC_LEN		0x00100000
 
+#define CONFIG_BOOTCOMMAND		"run netboot"
+#define CONFIG_BOOTFILE 		"dtbImage.microwatt.elf"
+#define CONFIG_EXTRA_ENV_SETTINGS                                       \
+	"autostart=yes\0"						\
+	"netboot=dhcp && bootelf\0"
+
 #endif
