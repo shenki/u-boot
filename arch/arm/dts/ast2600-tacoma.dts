@@ -100,5 +100,5 @@
 
 &acry {
 	u-boot,dm-pre-reloc;
-	status = "okay";
+	status = "disabled";
 };

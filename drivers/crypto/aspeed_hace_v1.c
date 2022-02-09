@@ -134,6 +134,16 @@ void hw_sha256(const unsigned char *pbuf, unsigned int buf_len,
 		debug("HACE failure: %d\n", rc);
 }
 
+void hw_sha384(const unsigned char *pbuf, unsigned int buf_len,
+	       unsigned char *pout, unsigned int chunk_size)
+{
+	int rc;
+
+	rc = digest_object(pbuf, buf_len, pout, HACE_ALGO_SHA384);
+	if (rc)
+		debug("HACE failure: %d\n", rc);
+}
+
 void hw_sha512(const unsigned char *pbuf, unsigned int buf_len,
 	       unsigned char *pout, unsigned int chunk_size)
 {
