@@ -45,6 +45,45 @@ config ASPEED_AST2600
 	  which is enabled by support of LPC and eSPI peripherals.
 endchoice
 
+config ASPEED_ALLOW_DANGEROUS_BACKDOORS
+	bool "Expose options enabling dangerous Aspeed hardware backdoors"
+	help
+	  This option exposes configuration settings that create
+	  critical security vulnerabilities by enabling dangerous
+	  hardware backdoors in Aspeed BMCs.  Enable it only if
+	  absolutely required for a specific system or for debugging
+	  during development.
+
+if ASPEED_ALLOW_DANGEROUS_BACKDOORS
+
+config ASPEED_ENABLE_SUPERIO
+	bool "Enable built-in AST2x00 Super I/O hardware"
+	depends on ASPEED_AST2400 || ASPEED_AST2500
+	help
+	  The Aspeed AST2400 and AST2500 include a built-in Super I/O
+	  device that is normally disabled; say Y here to enable it.
+
+	  WARNING: this has serious security implications: it grants
+	  the host read access to the BMC's entire address space.
+	  This should thus be left disabled unless required by a
+	  specific system.
+
+config ASPEED_ENABLE_DEBUG_UART
+	bool "Enable AST2500 hardware debug UART"
+	depends on ASPEED_AST2500
+	help
+	  The Aspeed AST2500 include a hardware-supported, UART-based
+	  debug interface that is normally disabled; say Y here to
+	  enable it.
+
+	  Note that this has security implications: the debug UART
+	  provides read/write access to the BMC's entire address
+	  space.  This should thus be left disabled on production
+	  systems, but may be useful to enable for debugging during
+	  development.
+
+endif
+
 config ASPEED_PALLADIUM
 	bool "Aspeed palladium for simulation"
 	default n
