@@ -3,8 +3,8 @@
 #include "ast2400-u-boot.dtsi"
 
 / {
-        model = "AST2400 EVB";
-        compatible = "aspeed,ast2400-evb", "aspeed,ast2400";
+	model = "AST2400 EVB";
+	compatible = "aspeed,ast2400-evb", "aspeed,ast2400";
 
 	memory {
 		device_type = "memory";

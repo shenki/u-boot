@@ -3,8 +3,8 @@
 #include "ast2500-u-boot.dtsi"
 
 / {
-        model = "AST2500 EVB";
-        compatible = "aspeed,ast2500-evb", "aspeed,ast2500";
+	model = "AST2500 EVB";
+	compatible = "aspeed,ast2500-evb", "aspeed,ast2500";
 
 	memory {
 		device_type = "memory";

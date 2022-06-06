@@ -5,8 +5,8 @@
 #include "ast2600-u-boot.dtsi"
 
 / {
-        model = "Tacoma";
-        compatible = "ibm,tacoma-bmc", "aspeed,ast2600";
+	model = "Tacoma";
+	compatible = "ibm,tacoma-bmc", "aspeed,ast2600";
 
 	memory {
 		device_type = "memory";
