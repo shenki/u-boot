@@ -25,11 +25,9 @@
 #include <linux/bitops.h>
 #include <linux/io.h>
 #include <linux/iopoll.h>
+#include <linux/if_ether.h>
 
 #include "ftgmac100.h"
-
-/* Min frame ethernet frame size without FCS */
-#define ETH_ZLEN			60
 
 /* Receive Buffer Size Register - HW default is 0x640 */
 #define FTGMAC100_RBSR_DEFAULT		0x640
