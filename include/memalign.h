@@ -71,6 +71,7 @@
 #define ALLOC_ALIGN_BUFFER_PAD(type, name, size, align, pad)		\
 	char __##name[ROUND(PAD_SIZE((size) * sizeof(type), pad), align)  \
 		      + (align - 1)];					\
+	memset(__##name, 0, sizeof(__##name));				\
 									\
 	type *name = (type *)ALIGN((uintptr_t)__##name, align)
 #define ALLOC_ALIGN_BUFFER(type, name, size, align)		\
