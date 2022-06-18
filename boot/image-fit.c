@@ -1302,7 +1302,18 @@ static int fit_image_check_hash(const void *fit, int noffset, const void *data,
 		*err_msgp = "Bad hash value len";
 		return -1;
 	} else if (memcmp(value, fit_value, value_len) != 0) {
+		int i;
 		*err_msgp = "Bad hash value";
+		printf("fit value: ");
+		for (i=0; i<value_len; i++)
+			printf("%02x ", value[i]);
+		printf("\n");
+
+		printf("value: ");
+		for (i=0; i<value_len; i++)
+			printf("%02x ", fit_value[i]);
+		printf("\n");
+
 		return -1;
 	}
 
