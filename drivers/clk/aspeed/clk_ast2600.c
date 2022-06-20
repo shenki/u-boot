@@ -8,6 +8,7 @@
 #include <dm.h>
 #include <asm/io.h>
 #include <dm/lists.h>
+#include <dm/device_compat.h>
 #include <linux/delay.h>
 #include <asm/arch/scu_ast2600.h>
 #include <asm/global_data.h>
@@ -471,7 +472,7 @@ static ulong ast2600_clk_get_rate(struct clk *clk)
 		rate = ast2600_get_uart_huxclk_rate(priv->scu);
 		break;
 	default:
-		debug("can't get clk rate\n");
+		pr_err("can't get clk rate for %ld\n", clk->id);
 		return -ENOENT;
 	}
 
@@ -1098,7 +1099,7 @@ static int ast2600_clk_enable(struct clk *clk)
 		ast2600_enable_rsaclk(priv->scu);
 		break;
 	default:
-		pr_err("can't enable clk\n");
+		pr_err("can't enable clk %ld\n", clk->id);
 		return -ENOENT;
 	}
 
