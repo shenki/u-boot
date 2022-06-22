@@ -10,6 +10,7 @@
 #include <malloc.h>
 #include <sdhci.h>
 #include <linux/err.h>
+#include <dm/lists.h>
 
 struct aspeed_sdhci_plat {
 	struct mmc_config cfg;
@@ -88,4 +89,38 @@ U_BOOT_DRIVER(aspeed_sdhci_drv) = {
 	.probe		= aspeed_sdhci_probe,
 	.priv_auto	= sizeof(struct sdhci_host),
 	.plat_auto	= sizeof(struct aspeed_sdhci_plat),
+};
+
+
+static int aspeed_sdc_probe(struct udevice *parent)
+{
+	ofnode node;
+
+	dev_for_each_subnode(node, parent) {
+		struct udevice *dev;
+		int ret;
+
+		/* TODO: do we need to check the node is enabled? */
+		ret = device_bind_driver_to_node(parent, "aspeed_sdhci",
+						 ofnode_get_name(node),
+						 node, &dev);
+		if (ret)
+			return ret;
+	}
+
+	return 0;
+}
+
+static const struct udevice_id aspeed_sdc_ids[] = {
+	{ .compatible = "aspeed,ast2400-sd-controller" },
+	{ .compatible = "aspeed,ast2500-sd-controller" },
+	{ .compatible = "aspeed,ast2600-sd-controller" },
+	{ }
+};
+
+U_BOOT_DRIVER(aspeed_sdc_drv) = {
+	.name		= "aspeed_sdc",
+	.id		= UCLASS_MISC,
+	.of_match	= aspeed_sdc_ids,
+	.probe		= aspeed_sdc_probe,
 };
