@@ -160,7 +160,7 @@
 			litex,tx-slots = <2>;
 			litex,slot-size = <0x800>;
 			interrupts = <0x11 0x1>;
-			mac-address = [00 18 3e 03 27 98];
+			local-mac-address = [ 00 00 00 00 00 00 ];
 		};
 
 		litex-mmc@8040000 {
