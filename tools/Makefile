@@ -159,9 +159,11 @@ HOSTLOADLIBES_mkimage += \
 ifeq ($(HOSTOS),darwin)
 HOSTCFLAGS_mxsimage.o += -Wno-deprecated-declarations
 HOSTCFLAGS_image-sig.o += -Wno-deprecated-declarations
+endif
+endif
+
+# Disable warnings on systems with OpenSSL 3.0
 HOSTCFLAGS_rsa-sign.o += -Wno-deprecated-declarations
-endif
-endif
 
 HOSTCFLAGS_fit_image.o += -DMKIMAGE_DTC=\"$(CONFIG_MKIMAGE_DTC_PATH)\"
 
