@@ -121,6 +121,11 @@ RUN chmod +r /boot/vmlinu*
 RUN git clone git://git.savannah.gnu.org/grub.git /tmp/grub && \
 	cd /tmp/grub && \
 	git checkout grub-2.06 && \
+	# config user.name and user.email to make 'git am' happy
+	git config user.name u-boot && \
+	git config user.email u-boot@denx.de && \
+	# manually apply the bug fix for risc-v with Binutils 2.38
+	wget -O - http://git.savannah.gnu.org/cgit/grub.git/patch/?id=049efdd72eb7baa7b2bf8884391ee7fe650da5a0 | git am && \
 	./bootstrap && \
 	mkdir -p /opt/grub && \
 	./configure --target=aarch64 --with-platform=efi \
