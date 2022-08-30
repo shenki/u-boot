@@ -11,7 +11,7 @@
 
 static ulong maybe_watchdog_reset(ulong flushed)
 {
-	flushed += CONFIG_SYS_CACHELINE_SIZE;
+	flushed += L1_CACHE_BYTES;
 	if (flushed >= CONFIG_CACHE_FLUSH_WATCHDOG_THRESHOLD) {
 		WATCHDOG_RESET();
 		flushed = 0;
@@ -24,11 +24,11 @@ void flush_cache(ulong start_addr, ulong size)
 	ulong addr, start, end;
 	ulong flushed = 0;
 
-	start = start_addr & ~(CONFIG_SYS_CACHELINE_SIZE - 1);
+	start = start_addr & ~(L1_CACHE_BYTES - 1);
 	end = start_addr + size - 1;
 
 	for (addr = start; (addr <= end) && (addr >= start);
-			addr += CONFIG_SYS_CACHELINE_SIZE) {
+			addr += L1_CACHE_BYTES) {
 		asm volatile("dcbst 0,%0" : : "r" (addr) : "memory");
 		flushed = maybe_watchdog_reset(flushed);
 	}
@@ -36,7 +36,7 @@ void flush_cache(ulong start_addr, ulong size)
 	asm volatile("sync" : : : "memory");
 
 	for (addr = start; (addr <= end) && (addr >= start);
-			addr += CONFIG_SYS_CACHELINE_SIZE) {
+			addr += L1_CACHE_BYTES) {
 		asm volatile("icbi 0,%0" : : "r" (addr) : "memory");
 		flushed = maybe_watchdog_reset(flushed);
 	}
