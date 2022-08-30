@@ -13,9 +13,6 @@
 
 	.text
 	.long	0x27051956		/* U-Boot Magic Number */
-	.globl	version_string
-version_string:
-	.ascii U_BOOT_VERSION_STRING, "\0"
 	.balign	4
 
 	.globl	_start
