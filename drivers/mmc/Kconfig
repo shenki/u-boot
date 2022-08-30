@@ -794,6 +794,7 @@ config MMC_LITEX
 	depends on LITEX_SUPPORT
 	depends on DM_MMC
 	depends on OF_CONTROL
+	depends on CLK
 	help
 	  This enables support for the litesdcard interface from
 	  the Litex project.
