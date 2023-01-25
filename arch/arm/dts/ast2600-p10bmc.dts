@@ -13,6 +13,17 @@
 		reg = <0x80000000 0x40000000>;
 	};
 
+	reserved-memory {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges;
+
+		event_log: tcg_event_log@b3d00000 {
+			no-map;
+			reg = <0xb3d00000 0x100000>;
+		};
+	};
+
 	chosen {
 		stdout-path = &uart5;
 	};
@@ -107,12 +118,23 @@
 	u-boot,dm-pre-reloc;
 };
 
+&i2c {
+	u-boot,dm-pre-reloc;
+};
+
+&i2cglobal {
+	u-boot,dm-pre-reloc;
+};
+
 &i2c12 {
+	u-boot,dm-pre-reloc;
 	status = "okay";
 
 	tpm@2e {
+		u-boot,dm-pre-reloc;
 		compatible = "nuvoton,npct75x";
 		reg = <0x2e>;
+		memory-region = <&event_log>;
 	};
 };
 
