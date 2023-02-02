@@ -12,6 +12,7 @@ Use U-Boot
    partitions
    cmdline
    semihosting
+   measured_boot
 
 Shell commands
 --------------
