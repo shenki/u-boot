@@ -55,6 +55,8 @@ ulong bootm_disable_interrupts(void);
 int bootm_find_images(int flag, int argc, char *const argv[], ulong start,
 		      ulong size);
 
+int bootm_measure(struct bootm_headers *images);
+
 int do_bootm_states(struct cmd_tbl *cmdtp, int flag, int argc,
 		    char *const argv[], int states, struct bootm_headers *images,
 		    int boot_progress);
