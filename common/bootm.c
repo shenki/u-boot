@@ -18,6 +18,7 @@
 #include <lzma/LzmaTypes.h>
 #include <lzma/LzmaDec.h>
 #include <lzma/LzmaTools.h>
+#include <tpm-v2.h>
 #if defined(CONFIG_CMD_USB)
 #include <usb.h>
 #endif
@@ -599,6 +600,67 @@ static void fixup_silent_linux(void)
 }
 #endif /* CONFIG_SILENT_CONSOLE */
 
+int bootm_measure(struct bootm_headers *images)
+{
+	int ret = 0;
+
+	if (IS_ENABLED(CONFIG_MEASURED_BOOT)) {
+		struct tcg2_event_log elog;
+		struct udevice *dev;
+		void *initrd_buf;
+		void *image_buf;
+		const char *s;
+		u32 rd_len;
+
+		elog.log_size = 0;
+		ret = tcg2_measurement_init(&dev, &elog);
+		if (ret)
+			return ret;
+
+		image_buf = map_sysmem(images->os.image_start,
+				       images->os.image_len);
+		ret = tcg2_measure_data(dev, &elog, 8, images->os.image_len,
+					image_buf, EV_COMPACT_HASH,
+					strlen("linux") + 1, (u8 *)"linux");
+		if (ret)
+			goto unmap_image;
+
+		rd_len = images->rd_end - images->rd_start;
+		initrd_buf = map_sysmem(images->rd_start, rd_len);
+		ret = tcg2_measure_data(dev, &elog, 9, rd_len, initrd_buf,
+					EV_COMPACT_HASH, strlen("initrd") + 1,
+					(u8 *)"initrd");
+		if (ret)
+			goto unmap_initrd;
+
+		if (IS_ENABLED(CONFIG_MEASURE_DEVICETREE)) {
+			ret = tcg2_measure_data(dev, &elog, 0, images->ft_len,
+						(u8 *)images->ft_addr,
+						EV_TABLE_OF_DEVICES,
+						strlen("dts") + 1,
+						(u8 *)"dts");
+			if (ret)
+				goto unmap_initrd;
+		}
+
+		s = env_get("bootargs");
+		if (!s)
+			s = "";
+		ret = tcg2_measure_data(dev, &elog, 1, strlen(s) + 1, (u8 *)s,
+					EV_PLATFORM_CONFIG_FLAGS,
+					strlen(s) + 1, (u8 *)s);
+
+unmap_initrd:
+		unmap_sysmem(initrd_buf);
+
+unmap_image:
+		unmap_sysmem(image_buf);
+		tcg2_measurement_term(dev, &elog, ret != 0);
+	}
+
+	return ret;
+}
+
 /**
  * Execute selected states of the bootm command.
  *
@@ -645,6 +707,10 @@ int do_bootm_states(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[],
 
 	if (!ret && (states & BOOTM_STATE_FINDOTHER))
 		ret = bootm_find_other(cmdtp, flag, argc, argv);
+
+	if (IS_ENABLED(CONFIG_MEASURED_BOOT) && !ret &&
+	    (states & BOOTM_STATE_MEASURE))
+		bootm_measure(images);
 
 	/* Load the OS */
 	if (!ret && (states & BOOTM_STATE_LOADOS)) {

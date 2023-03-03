@@ -128,6 +128,9 @@ int do_bootm(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 #ifdef CONFIG_SYS_BOOT_RAMDISK_HIGH
 		BOOTM_STATE_RAMDISK |
 #endif
+#ifdef CONFIG_MEASURED_BOOT
+		BOOTM_STATE_MEASURE |
+#endif
 #if defined(CONFIG_PPC) || defined(CONFIG_MIPS)
 		BOOTM_STATE_OS_CMDLINE |
 #endif
