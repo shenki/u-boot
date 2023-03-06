@@ -118,20 +118,10 @@
 	u-boot,dm-pre-reloc;
 };
 
-&i2c {
-	u-boot,dm-pre-reloc;
-};
-
-&i2cglobal {
-	u-boot,dm-pre-reloc;
-};
-
 &i2c12 {
-	u-boot,dm-pre-reloc;
 	status = "okay";
 
 	tpm@2e {
-		u-boot,dm-pre-reloc;
 		compatible = "nuvoton,npct75x";
 		reg = <0x2e>;
 		memory-region = <&event_log>;
